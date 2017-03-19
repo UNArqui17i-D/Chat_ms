@@ -15,7 +15,7 @@ func main(){
 	connect.InitializeDatabase()
 	defer connect.CloseConnection()
 	mux := mux.NewRouter()
-	mux.HandleFunc("/Chat_ms/Api/Message/{userId}", GetMessages).Methods("GET")
+	mux.HandleFunc("/Chat_ms/Api/Message/{id}", GetChat).Methods("GET")
 	mux.HandleFunc("/Chat_ms/Api/Message", AddMessage).Methods("POST")
 
 	http.Handle("/", mux)
@@ -25,13 +25,13 @@ func main(){
 
 
 //Funciones GET
-func GetMessages(w http.ResponseWriter, r *http.Request){
+func GetChat(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
-	userId := vars["userId"]
+	id := vars["id"]
 
 	status := "success"
 	var message string
-	chat := connect.GetMessages(userId)
+	chat := connect.GetMessages(id)
 
 	if(chat.Id <= 0){
 		status = "Error"

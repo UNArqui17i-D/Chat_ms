@@ -3,8 +3,8 @@ package structures
 type Chat struct{
 	Id 			int 	`json:"id"`
 	Message 	string  `json:"message"`
-	UserFrom 	int 	`json:"idUserFrom"`
-	UserTo 		int 	`json:"idUserTo"`
+	Userfrom 		int 	`json:"userfrom"`
+	Userto 			int 	`json:"userto"`
 }
 
 
