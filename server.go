@@ -6,18 +6,9 @@ import (
 	"net/http"
 	"encoding/json"
 	"./connects"
+	//"./structures"
 )
 
-//Estructuras
-type Response struct{
-	Message string  `json:"message"`
-	Status bool `json:"status"`
-}
-type Message struct{
-	Message string  `json:"message"`
-	IdUserFrom int `json:"from"`
-	IdUserTo int `json:"to"`
-}
 
 //Función Main
 func main(){
@@ -25,7 +16,6 @@ func main(){
 	defer connect.CloseConnection()
 	mux := mux.NewRouter()
 	mux.HandleFunc("/Chat_ms/Api/Message/{userId}", GetMessages).Methods("GET")
-	mux.HandleFunc("/HolaJson", HolaMundoJson).Methods("GET")
 	mux.HandleFunc("/Chat_ms/Api/Message", AddMessage).Methods("POST")
 
 	http.Handle("/", mux)
@@ -38,18 +28,10 @@ func main(){
 func GetMessages(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
 	userId := vars["userId"]
-	w.Write([]byte(userId))
-}
 
-func HolaMundoJson(w http.ResponseWriter, r *http.Request){
-	Response := CreateResponse()
-	json.NewEncoder(w).Encode(Response)
+	message := connect.GetMessages(userId)
+	json.NewEncoder(w).Encode(message)
 }
-
-func CreateResponse() Response {
-	return Response{"Esto está en formato JSON", true}
-}
-
 
 //Funciones POST
 func AddMessage(w http.ResponseWriter, r *http.Request) {

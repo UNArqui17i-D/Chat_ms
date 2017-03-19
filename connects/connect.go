@@ -4,6 +4,7 @@ import(
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"	
 	"log"
+	"../structures"
 )
 
 var connection *gorm.DB
@@ -27,6 +28,7 @@ func CloseConnection(){
 func ConnectORM(stringConnection string) *gorm.DB{
 	connection, err := gorm.Open(engine_sql, stringConnection)
 	if(err != nil){
+		log.Println("lol")
 		log.Fatal(err)
 		return nil
 	}
@@ -35,4 +37,13 @@ func ConnectORM(stringConnection string) *gorm.DB{
 
 func CreateString() string{
 	return username+":"+password+"@/"+database
+}
+
+
+
+//Funciones
+func GetMessages(id string) structures.Chat {
+	chat := structures.Chat{}
+	connection.Where("id = ?", id).First(&chat)
+	return chat
 }
