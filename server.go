@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"./connects"
-	//"./structures"
+	"./structures"
 )
 
 
@@ -29,8 +29,17 @@ func GetMessages(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
 	userId := vars["userId"]
 
-	message := connect.GetMessages(userId)
-	json.NewEncoder(w).Encode(message)
+	status := "success"
+	var message string
+	chat := connect.GetMessages(userId)
+
+	if(chat.Id <= 0){
+		status = "Error"
+		message = "No existe este chat"
+	}
+	response := structures.Response{status, chat, message}
+
+	json.NewEncoder(w).Encode(response)
 }
 
 //Funciones POST
