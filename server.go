@@ -56,11 +56,22 @@ func GetChat(w http.ResponseWriter, r *http.Request) {
 		message = "No existe este chat"
 	}
 	response := structures.Response{status, chat, message}
-
 	json.NewEncoder(w).Encode(response)
 }
 
 //Funciones POST
 func AddMessage(w http.ResponseWriter, r *http.Request) {
-	//Message := Message{"Probando", 1, 2}
+	message := connect.CreateMessage(GetMessageRequest(r))
+	response := structures.ResponseMessage{"success", message, "Mensaje enviado"}
+	json.NewEncoder(w).Encode(response)
+}
+
+func GetMessageRequest(r *http.Request) structures.Message {
+	message := structures.Message{}
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&message)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return message
 }

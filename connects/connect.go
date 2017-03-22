@@ -39,17 +39,22 @@ func CreateString() string {
 	return username + ":" + password + "@/" + database
 }
 
-//Funciones
-func GetMessage(id string) structures.Chat {
-	chat := structures.Chat{}
+//Funciones GET
+func GetMessage(id string) structures.Message {
+	chat := structures.Message{}
 	connection.Where("id = ?", id).Find(&chat)
 	return chat
 }
 
-//Funciones
-func GetChat(userFrom string, userTo string) []structures.Chat {
-	chats := []structures.Chat{}
+func GetChat(userFrom string, userTo string) []structures.Message {
+	chats := []structures.Message{}
 	log.Println(userFrom)
 	connection.Where("(userfrom = ? && userto = ?) || (userto = ? && userfrom = ?)", userFrom, userTo, userFrom, userTo).Find(&chats)
 	return chats
+}
+
+//Funciones POST
+func CreateMessage(message structures.Message) structures.Message {
+	connection.Create(&message)
+	return message
 }

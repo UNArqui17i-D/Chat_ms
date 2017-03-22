@@ -2,9 +2,9 @@ CREATE DATABASE ChatsDB;
 
 USE ChatsDB;
 
-DROP TABLE Chats;
+DROP TABLE Messages;
 
-CREATE TABLE Chats
+CREATE TABLE Messages
 (
 	id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	message text,
@@ -12,4 +12,4 @@ CREATE TABLE Chats
 	userto int 
 );
 
-INSERT INTO Chats (message, userfrom, userto) VALUES ('Prueba de mensaje', 1, 2);
+INSERT INTO Messages (message, userfrom, userto) VALUES ('Prueba de mensaje', 1, 2);
