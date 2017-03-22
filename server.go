@@ -66,6 +66,7 @@ func AddMessage(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+//Funciones privadas
 func GetMessageRequest(r *http.Request) structures.Message {
 	message := structures.Message{}
 	decoder := json.NewDecoder(r.Body)
