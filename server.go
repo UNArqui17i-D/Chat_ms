@@ -1,21 +1,22 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
+	"encoding/json"
 	"log"
 	"net/http"
-	"encoding/json"
+
 	"./connects"
 	"./structures"
+	"github.com/gorilla/mux"
 )
 
-
 //Función Main
-func main(){
+func main() {
 	connect.InitializeDatabase()
 	defer connect.CloseConnection()
 	mux := mux.NewRouter()
-	mux.HandleFunc("/Chat_ms/Api/Message/{id}", GetChat).Methods("GET")
+	mux.HandleFunc("/Chat_ms/Api/Message/{id}", GetMessage).Methods("GET")
+	mux.HandleFunc("/Chat_ms/Api/Chat/{userFrom}&{userTo}", GetChat).Methods("GET")
 	mux.HandleFunc("/Chat_ms/Api/Message", AddMessage).Methods("POST")
 
 	http.Handle("/", mux)
@@ -23,17 +24,34 @@ func main(){
 	log.Fatal(http.ListenAndServe(":4005", nil))
 }
 
-
 //Funciones GET
-func GetChat(w http.ResponseWriter, r *http.Request){
+func GetMessage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 
 	status := "success"
 	var message string
-	chat := connect.GetMessages(id)
+	chat := connect.GetMessage(id)
 
-	if(chat.Id <= 0){
+	if chat.Id <= 0 {
+		status = "Error"
+		message = "No existe este chat"
+	}
+	response := structures.ResponseMessage{status, chat, message}
+
+	json.NewEncoder(w).Encode(response)
+}
+
+func GetChat(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userFrom := vars["userFrom"]
+	userTo := vars["userTo"]
+
+	status := "success"
+	var message string
+	chat := connect.GetChat(userFrom, userTo)
+
+	if len(chat) <= 0 {
 		status = "Error"
 		message = "No existe este chat"
 	}
