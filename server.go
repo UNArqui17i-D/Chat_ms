@@ -8,6 +8,7 @@ import (
 	"./connects"
 	"./structures"
 	"github.com/gorilla/mux"
+	"gopkg.in/mgo.v2/bson"
 )
 
 //Función Main
@@ -27,13 +28,13 @@ func main() {
 //Funciones GET
 func GetMessage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	id := bson.ObjectIdHex(vars["id"])
 
 	status := "success"
 	var message string
-	chat := connect.GetMessage(id)
+	chat, err := connect.GetMessage(id)
 
-	if chat.Id <= 0 {
+	if err != nil {
 		status = "Error"
 		message = "No existe este chat"
 	}
@@ -49,9 +50,9 @@ func GetChat(w http.ResponseWriter, r *http.Request) {
 
 	status := "success"
 	var message string
-	chat := connect.GetChat(userFrom, userTo)
+	chat, err := connect.GetChat(userFrom, userTo)
 
-	if len(chat) <= 0 {
+	if err != nil {
 		status = "Error"
 		message = "No existe este chat"
 	}
@@ -61,8 +62,16 @@ func GetChat(w http.ResponseWriter, r *http.Request) {
 
 //Funciones POST
 func AddMessage(w http.ResponseWriter, r *http.Request) {
-	message := connect.CreateMessage(GetMessageRequest(r))
-	response := structures.ResponseMessage{"success", message, "Mensaje enviado"}
+	message, err := connect.CreateMessage(GetMessageRequest(r))
+	response := structures.ResponseMessage{}
+	response.Data = message
+	if err != nil {
+		response.Status = "Error"
+		response.Message = "No se pudo enviar el mensaje"
+	} else {
+		response.Status = "Success"
+		response.Message = "Mensaje enviado"
+	}
 	json.NewEncoder(w).Encode(response)
 }
 

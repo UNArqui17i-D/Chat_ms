@@ -31,47 +31,32 @@ func InitializeDatabase() {
 	session.SetMode(mgo.Monotonic, true)
 	collection = session.DB("MessagesDB").C("messages")
 
-	//connection = ConnectORM(CreateString())
 	log.Println("Conexión exitosa")
 }
 
 func CloseConnection() {
 	defer session.Close()
-	//connection.Close()
 	log.Println("Conexión cerrada")
 }
 
-/*func ConnectORM(stringConnection string) *gorm.DB {
-	connection, err := gorm.Open(engine_sql, stringConnection)
-	if err != nil {
-		log.Fatal(err)
-		return nil
-	}
-	return connection
-}
-
-func CreateString() string {
-	return username + ":" + password + "@/" + database
-}*/
-
 //Funciones GET
-func GetMessage(id string) structures.Message {
+func GetMessage(id bson.ObjectId) (structures.Message, error) {
 	chat := structures.Message{}
-	collection.Find(bson.M{"id": id})
-	//connection.Where("id = ?", id).Find(&chat)
-	return chat
+	err := collection.Find(bson.M{"_id": id}).One(&chat)
+	return chat, err
 }
 
-func GetChat(userFrom string, userTo string) []structures.Message {
+func GetChat(userFrom string, userTo string) ([]structures.Message, error) {
 	chats := []structures.Message{}
 	log.Println(userFrom)
-	//connection.Where("(userfrom = ? && userto = ?) || (userto = ? && userfrom = ?)", userFrom, userTo, userFrom, userTo).Find(&chats)
-	return chats
+	err := collection.Find(bson.M{"userfrom": userFrom}).All(&chats)
+	return chats, err
 }
 
 //Funciones POST
-func CreateMessage(message structures.Message) structures.Message {
-	collection.Insert(&message)
-	//connection.Create(&message)
-	return message
+func CreateMessage(message structures.Message) (structures.Message, error) {
+	obj_id := bson.NewObjectId()
+	message.Id = obj_id
+	err := collection.Insert(&message)
+	return message, err
 }

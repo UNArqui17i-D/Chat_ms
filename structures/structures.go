@@ -1,10 +1,14 @@
 package structures
 
+import (
+	"gopkg.in/mgo.v2/bson"
+)
+
 type Message struct {
-	Id       int    `json:"id"`
-	Message  string `json:"message"`
-	Userfrom int    `json:"userfrom"`
-	Userto   int    `json:"userto"`
+	Id       bson.ObjectId `bson:"_id" json:"id"`
+	Message  string        `bson:"message" json:"message"`
+	Userfrom int           `bson:"userfrom" json:"userfrom"`
+	Userto   int           `bson:"userto" json:"userto"`
 }
 
 type Response struct {
