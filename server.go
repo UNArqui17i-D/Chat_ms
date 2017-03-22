@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"strconv"
+
 	"./connects"
 	"./structures"
 	"github.com/gorilla/mux"
@@ -45,12 +47,12 @@ func GetMessage(w http.ResponseWriter, r *http.Request) {
 
 func GetChat(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	userFrom := vars["userFrom"]
-	userTo := vars["userTo"]
+	idFrom, _ := strconv.Atoi(vars["userFrom"])
+	idTo, _ := strconv.Atoi(vars["userTo"])
 
 	status := "success"
 	var message string
-	chat, err := connect.GetChat(userFrom, userTo)
+	chat, err := connect.GetChat(idFrom, idTo)
 
 	if err != nil {
 		status = "Error"

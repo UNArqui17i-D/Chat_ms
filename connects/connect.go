@@ -46,10 +46,10 @@ func GetMessage(id bson.ObjectId) (structures.Message, error) {
 	return chat, err
 }
 
-func GetChat(userFrom string, userTo string) ([]structures.Message, error) {
+func GetChat(userFrom int, userTo int) ([]structures.Message, error) {
 	chats := []structures.Message{}
 	log.Println(userFrom)
-	err := collection.Find(bson.M{"userfrom": userFrom}).All(&chats)
+	err := collection.Find(bson.M{"$or": []bson.M{bson.M{"userfrom": userFrom, "userto": userTo}, bson.M{"userfrom": userTo, "userto": userFrom}}}).All(&chats)
 	return chats, err
 }
 
