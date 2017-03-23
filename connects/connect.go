@@ -10,8 +10,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-//var connection *gorm.DB
-
 var (
 	session    *mgo.Session
 	collection *mgo.Collection

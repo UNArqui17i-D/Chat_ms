@@ -1,0 +1,8 @@
+chat-db:
+  build: ./MongoDB
+  ports:
+    - "20107:27017"
+chat-ms:
+  build: .
+  ports:
+    - "4005:4005"
