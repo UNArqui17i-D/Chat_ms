@@ -133,7 +133,7 @@ const password string = "ArqSoft.123"
 const database string = "ChatsDB"
 
 func InitializeDatabase() {
-	session, err := mgo.Dial("192.168.99.101")
+	session, err := mgo.Dial("192.168.99.101:3307")
 	if err != nil {
 		log.Fatal(err)
 	}

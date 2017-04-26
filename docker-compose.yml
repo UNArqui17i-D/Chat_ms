@@ -1,7 +1,7 @@
 chat-db:
   build: ./MongoDB
   ports:
-    - 3307:3307
+    - 3307:27017
   hostname: mongodb
 chat-ms:
   build: .
