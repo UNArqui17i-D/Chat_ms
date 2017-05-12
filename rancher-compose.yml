@@ -1,2 +1,4 @@
-bank-wa:
+chat_ms:
+  scale: 2
+chat-db:
   scale: 2

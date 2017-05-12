@@ -6,7 +6,7 @@ chat-db:
   hostname: mongodb
 chat-ms:
   #build: .
-  image: javergarav/jarkko_chat
+  image: jaquinonesg/jarkko_chat
   ports:
     - "4005:4005"
   links:
