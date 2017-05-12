@@ -9,5 +9,3 @@ chat-ms:
   image: jaquinonesg/jarkko_chat
   ports:
     - "4005:4005"
-  links:
-    - chat-db

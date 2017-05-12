@@ -1,4 +1,6 @@
-chat_ms:
-  scale: 2
-chat-db:
-  scale: 2
+version: '2'
+services:
+  chat-ms:
+    scale: 2
+  chat-db:
+    scale: 2
